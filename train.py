@@ -24,15 +24,25 @@ def main():
 
     model = HARmodel(params["input_dim"], params["num_classes"])
 
-    if params["use_cuda"]:
-        model = model.cuda()
+    #if params["use_cuda"]:
+    #    model = model.cuda()
+
+    # 在代码中加载配置
+    device = torch.device(params["device"])
+    # 然后将模型和数据都送到这个设备上
+    model.to(device)
 
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(),
-                                lr=params["lr"],
-                                momentum=params["momentum"],
-                                weight_decay=params["weight_decay"])
-    
+    # optimizer = torch.optim.SGD(model.parameters(),
+    #                             lr=params["lr"],
+    #                             momentum=params["momentum"],
+    #                             weight_decay=params["weight_decay"])
+
+    optimizer = torch.optim.Adam(model.parameters(),
+                                 lr=params["lr"],
+                                 betas=(params.get("beta1", 0.9), params.get("beta2", 0.999)),
+                                 weight_decay=params["weight_decay"])
+
     params["start_epoch"] = 1
 
     # If checkpoint path is given, load checkpoint data
@@ -61,7 +71,7 @@ def main():
           criterion=criterion,
           optimizer=optimizer,
           params=params,
-          logger=logger,
+          logger=logger
           )
 
 if __name__ == "__main__":

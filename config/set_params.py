@@ -16,5 +16,6 @@ class params:
             "momentum": 0.9,
             "weight_decay": 1e-4,
             "split": 0.2,
-            "use_cuda": torch.cuda.is_available(),
+            "device": "cpu",
+            "use_cuda": torch.cuda.is_available()
         }
